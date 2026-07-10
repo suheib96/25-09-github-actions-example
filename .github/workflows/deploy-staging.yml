@@ -33,3 +33,11 @@ jobs:
               run: |
                 scp -i ~/.ssh/mein_schlüssel Frontend/index.html ubuntu@${{secrets.EC2_IP_STAGING}}:/home/ubuntu/index.html
                 ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP_STAGING}} "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
+
+            - name: Post a message in a channel
+              uses: slackapi/slack-github-action@v3.0.3
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  text: "🚀 Staging Pipeline wurde soeben beendet von ${{github.actor}}. Pipeline : ${{github.workflow}}"  
