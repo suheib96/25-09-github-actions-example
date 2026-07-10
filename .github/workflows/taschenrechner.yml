@@ -1,7 +1,6 @@
 name: Taschenrecher Deploy Workflow
 
-on: push
-
+on: workflow_dispatch
 jobs:
     test:
         runs-on: ubuntu-latest
