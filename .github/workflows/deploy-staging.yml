@@ -35,9 +35,19 @@ jobs:
                 ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP_STAGING}} "sudo cp /home/ubuntu/index.html /var/www/html/index.html"
 
             - name: Post a message in a channel
+              if: ${{ success()}}
               uses: slackapi/slack-github-action@v3.0.3
               with:
                 webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
                 webhook-type: incoming-webhook
                 payload: |
-                  text: "🚀 Staging Pipeline wurde soeben beendet von ${{github.actor}}. Pipeline : ${{github.workflow}}"  
+                  text: "✅ Staging Pipeline wurde soeben erfolgreich beendet von ${{github.actor}}. Pipeline : ${{github.workflow}}"  
+            
+            - name: Post a message in a channel
+              if: ${{ failure()}}
+              uses: slackapi/slack-github-action@v3.0.3
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  text: "❌ Staging Pipeline nicht erfolgreich abgeschlossen. Bitte unbedingt überprüfen."  
