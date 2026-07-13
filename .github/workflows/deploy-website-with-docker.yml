@@ -24,4 +24,6 @@ jobs:
               
             - name: start a docker container on ec2
               run: |
-                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "docker run -d -p 80:80 nginx"
+                  scp -i ~/.ssh/mein_schlüssel -r Frontend ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/
+
+            
