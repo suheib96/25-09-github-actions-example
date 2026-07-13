@@ -1,0 +1,25 @@
+name: Deploy Website with Docker
+
+on: push
+
+jobs: 
+    deploy:
+        runs-on: ubuntu-latest
+        
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: ssh setup
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/mein_schlüssel
+                  chmod 600 ~/.ssh/mein_schlüssel
+                  ssh-keyscan -H ${{secrets.EC2_IP}} >> ~/.ssh/known_hosts
+
+            - name: install docker on ec2
+              run: |
+                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "sudo apt update && sudo apt install docker.io -y"
+                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "sudo usermod -aG docker ubuntu"
+              
+            
