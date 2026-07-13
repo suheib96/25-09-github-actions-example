@@ -25,8 +25,8 @@ jobs:
             - name: start frontend container on ec2
               run: |
                   scp -i ~/.ssh/mein_schlüssel -r Frontend ubuntu@${{secrets.EC2_IP}}:/home/ubuntu/
-                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "docker build -t suheibs-frontend /home/ubuntu/Frontend"
-                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "docker run -d -p 80:80 suheibs-frontend"
+                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "docker build -t suheibs-frontend-image /home/ubuntu/Frontend"
+                  ssh -i ~/.ssh/mein_schlüssel ubuntu@${{secrets.EC2_IP}} "docker run -d -p 80:80 --name suheibs-frontend-container suheibs-frontend-image"
                   
 
             
